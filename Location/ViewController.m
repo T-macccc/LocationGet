@@ -20,6 +20,12 @@
 {
     CLLocation *currentLocation;
 }
+
+- (void)pingyin:(NSMutableString *)string{
+    if (CFStringTransform((__bridge CFMutableStringRef)string, 0, kCFStringTransformMandarinLatin, NO)) {}
+    if (CFStringTransform((__bridge CFMutableStringRef)string, 0, kCFStringTransformStripDiacritics, NO)){}
+}
+
 - (void)reverseGeocode:(CLLocation *)locations{
     
     if (currentLocation == nil) {
@@ -34,7 +40,9 @@
         }
         else{
             for (CLPlacemark *placemark in placemarks) {
-                NSLog(@"cityname:%@",placemark.locality);
+                NSMutableString *str = [[NSMutableString alloc]initWithString:placemark.locality];
+                [self pingyin:str];
+                NSLog(@"cityname:%@",str);
             }
         }
     }];
